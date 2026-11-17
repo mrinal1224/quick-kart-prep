@@ -8,32 +8,39 @@ import {
   StyleSheet,
   Pressable,
   Keyboard,
+  ScrollView,
+  Alert,
 } from 'react-native';
 
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import CategoryCard from '@/components/CategoryCard';
+import { categories, type Category } from '@/data/categories';
+
 export default function HomeScreen() {
-  // State to store search input
+  // Search state
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Function to clear the search input
+  // Clear search input
   const clearSearch = () => {
     setSearchQuery('');
+  };
+
+  // Handle category press
+  const handleCategoryPress = (category: Category) => {
+    Alert.alert(
+      category.name,
+      `${category.name} products coming soon!`
+    );
   };
 
   return (
     <SafeAreaView style={styles.container}>
 
-      {/* =========================
-          DELIVERY HEADER
-      ========================= */}
-
+      {/* DELIVERY HEADER */}
       <View style={styles.header}>
 
-        {/* Top Row */}
         <View style={styles.topRow}>
-
-          {/* App Branding */}
           <View style={styles.brandContainer}>
             <RNText style={styles.brand}>
               QUICKKART
@@ -44,18 +51,14 @@ export default function HomeScreen() {
             </RNText>
           </View>
 
-          {/* Profile Icon */}
           <View style={styles.profileIcon}>
             <RNText style={styles.profileEmoji}>
               👤
             </RNText>
           </View>
-
         </View>
 
-        {/* Delivery Location */}
         <View style={styles.locationRow}>
-
           <RNText style={styles.locationIcon}>
             📍
           </RNText>
@@ -69,24 +72,17 @@ export default function HomeScreen() {
               Electronic City, Bengaluru
             </RNText>
           </View>
-
         </View>
       </View>
 
-      {/* =========================
-          SEARCH SECTION
-      ========================= */}
-
+      {/* SEARCH SECTION */}
       <View style={styles.searchSection}>
-
         <View style={styles.searchContainer}>
 
-          {/* Search Icon */}
           <RNText style={styles.searchIcon}>
             🔍
           </RNText>
 
-          {/* Search Input */}
           <TextInput
             style={styles.searchInput}
             placeholder="Search for milk, bread, fruits..."
@@ -100,7 +96,6 @@ export default function HomeScreen() {
             onSubmitEditing={() => Keyboard.dismiss()}
           />
 
-          {/* Clear Search Button */}
           {searchQuery.length > 0 && (
             <Pressable
               onPress={clearSearch}
@@ -113,45 +108,59 @@ export default function HomeScreen() {
               </RNText>
             </Pressable>
           )}
-
         </View>
 
-        {/* Live Search Preview */}
         {searchQuery.trim().length > 0 && (
           <RNText style={styles.searchPreview}>
             Searching for: {searchQuery}
           </RNText>
         )}
-
       </View>
 
-      {/* =========================
-          MAIN CONTENT
-      ========================= */}
+      {/* SCROLLABLE MAIN CONTENT */}
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+      >
 
-      <View style={styles.content}>
-        <RNText style={styles.placeholder}>
-          Categories coming soon...
-        </RNText>
-      </View>
+        {/* CATEGORY SECTION */}
+        <View style={styles.categorySection}>
+
+          <RNText style={styles.sectionTitle}>
+            Shop by Category
+          </RNText>
+
+          <View style={styles.categoryGrid}>
+            {categories.map((category) => (
+              <View
+                key={category.id}
+                style={styles.categoryWrapper}
+              >
+                <CategoryCard
+                  category={category}
+                  onPress={handleCategoryPress}
+                />
+              </View>
+            ))}
+          </View>
+
+        </View>
+
+      </ScrollView>
 
     </SafeAreaView>
   );
 }
 
-// =========================
-// STYLES
-// =========================
-
 const styles = StyleSheet.create({
-
-  // Main Screen
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
   },
 
-  // Delivery Header
+  // DELIVERY HEADER
   header: {
     backgroundColor: '#FACC15',
     paddingHorizontal: 20,
@@ -159,14 +168,12 @@ const styles = StyleSheet.create({
     paddingBottom: 24,
   },
 
-  // Header Top Row
   topRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
 
-  // Branding
   brandContainer: {
     flex: 1,
   },
@@ -185,7 +192,6 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
 
-  // Profile Icon
   profileIcon: {
     width: 45,
     height: 45,
@@ -200,7 +206,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
   },
 
-  // Location
   locationRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -228,10 +233,11 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
 
-  // Search Section
+  // SEARCH SECTION
   searchSection: {
     paddingHorizontal: 20,
     paddingTop: 16,
+    paddingBottom: 8,
   },
 
   searchContainer: {
@@ -257,7 +263,6 @@ const styles = StyleSheet.create({
     paddingVertical: 0,
   },
 
-  // Clear Search Button
   clearButton: {
     padding: 8,
     marginLeft: 4,
@@ -268,21 +273,42 @@ const styles = StyleSheet.create({
     color: '#6B7280',
   },
 
-  // Live Search Preview
   searchPreview: {
     fontSize: 14,
     color: '#6B7280',
     marginTop: 12,
   },
 
-  // Main Content
-  content: {
+  // SCROLL VIEW
+  scrollView: {
     flex: 1,
-    padding: 20,
   },
 
-  placeholder: {
-    fontSize: 14,
-    color: '#9CA3AF',
+  scrollContent: {
+    paddingBottom: 30,
+  },
+
+  // CATEGORY SECTION
+  categorySection: {
+    paddingHorizontal: 20,
+    paddingTop: 20,
+  },
+
+  sectionTitle: {
+    fontSize: 21,
+    fontWeight: 'bold',
+    color: '#18181B',
+    marginBottom: 18,
+  },
+
+  categoryGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    rowGap: 20,
+  },
+
+  categoryWrapper: {
+    width: '33.3333%',
+    paddingHorizontal: 6,
   },
 });
