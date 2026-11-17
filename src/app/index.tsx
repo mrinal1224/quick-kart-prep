@@ -1,98 +1,157 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
+
+import React from 'react';
+
+import {
+  View,
+  Text as RNText,
+  StyleSheet,
+} from 'react-native';
+
 import { SafeAreaView } from 'react-native-safe-area-context';
-
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
-
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
-  }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
-  return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
-  );
-}
 
 export default function HomeScreen() {
   return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
+    <SafeAreaView style={styles.container}>
 
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
+      {/* Delivery Header */}
+      <View style={styles.header}>
 
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
-          />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
+        {/* Top Row */}
+        <View style={styles.topRow}>
 
-        {Platform.OS === 'web' && <WebBadge />}
-      </SafeAreaView>
-    </ThemedView>
+          {/* App Branding */}
+          <View>
+            <RNText style={styles.brand}>
+              QUICKKART
+            </RNText>
+
+            <RNText style={styles.deliveryTime}>
+              Delivery in 10 minutes
+            </RNText>
+          </View>
+
+          {/* Profile Icon */}
+          <View style={styles.profileIcon}>
+            <RNText style={styles.profileEmoji}>
+              👤
+            </RNText>
+          </View>
+
+        </View>
+
+        {/* Delivery Location */}
+        <View style={styles.locationRow}>
+
+          <RNText style={styles.locationIcon}>
+            📍
+          </RNText>
+
+          <View style={styles.locationDetails}>
+            <RNText style={styles.locationTitle}>
+              Home ▼
+            </RNText>
+
+            <RNText style={styles.address}>
+              Electronic City, Bengaluru
+            </RNText>
+          </View>
+
+        </View>
+
+      </View>
+
+      {/* Main Content - Coming Soon */}
+      <View style={styles.content}>
+        <RNText style={styles.placeholder}>
+          Home screen content coming next...
+        </RNText>
+      </View>
+
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    backgroundColor: '#FFFFFF',
+  },
+
+  header: {
+    backgroundColor: '#FACC15',
+    paddingHorizontal: 20,
+    paddingTop: 16,
+    paddingBottom: 24,
+  },
+
+  topRow: {
     flexDirection: 'row',
-  },
-  safeArea: {
-    flex: 1,
-    paddingHorizontal: Spacing.four,
+    justifyContent: 'space-between',
     alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
   },
-  heroSection: {
-    alignItems: 'center',
+
+  brand: {
+    fontSize: 14,
+    fontWeight: '800',
+    color: '#18181B',
+    letterSpacing: 1,
+  },
+
+  deliveryTime: {
+    fontSize: 23,
+    fontWeight: 'bold',
+    color: '#18181B',
+    marginTop: 4,
+  },
+
+  profileIcon: {
+    width: 45,
+    height: 45,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 25,
     justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 8,
+  },
+
+  profileEmoji: {
+    fontSize: 24,
+  },
+
+  locationRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 18,
+  },
+
+  locationIcon: {
+    fontSize: 22,
+    marginRight: 8,
+  },
+
+  locationDetails: {
     flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
   },
-  title: {
-    textAlign: 'center',
+
+  locationTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#18181B',
   },
-  code: {
-    textTransform: 'uppercase',
+
+  address: {
+    fontSize: 13,
+    color: '#3F3F46',
+    marginTop: 2,
   },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
+
+  content: {
+    flex: 1,
+    padding: 20,
+  },
+
+  placeholder: {
+    fontSize: 14,
+    color: '#9CA3AF',
   },
 });
