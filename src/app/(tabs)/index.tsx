@@ -9,15 +9,16 @@ import {
   Pressable,
   Keyboard,
   ScrollView,
-  Alert,
 } from 'react-native';
 
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router';
 
 import CategoryCard from '@/components/CategoryCard';
 import { categories, type Category } from '@/data/categories';
 
 export default function HomeScreen() {
+  const router = useRouter();
   // Search state
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -26,12 +27,12 @@ export default function HomeScreen() {
     setSearchQuery('');
   };
 
-  // Handle category press
+  // Navigate to the category screen with its dynamic ID.
   const handleCategoryPress = (category: Category) => {
-    Alert.alert(
-      category.name,
-      `${category.name} products coming soon!`
-    );
+    router.push({
+      pathname: '/category/[id]',
+      params: { id: category.id },
+    });
   };
 
   return (
